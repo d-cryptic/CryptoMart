@@ -1,34 +1,88 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CryptoMart - A NFT Marketplace
 
-## Getting Started
+## Techstack
 
-First, run the development server:
+1. <b>NextJS</b>
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+   - `npx create-next-app projectName`
+   - Change `package.json` with the `package.json` in this repo to ensure same version of packages get installed
+     > Instead of `npm install` run `npm install --legacy-peer-deps`!
+   - Run nextJS by `npm run dev`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. <b> HardHat </b>
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+   - used to deploy and test blockchain smart contracts
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+3. <b>Openzeppelin</b>
+   - provides utility code to create our contract
+4. <b>Axios</b>
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+   - used to make API request
 
-## Learn More
+5. <b>ethers</b>
 
-To learn more about Next.js, take a look at the following resources:
+   - used to interact with blockchain smart contract on client side
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+6. <b>ipfs http client</b>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+   - allow us to deploy our NFTs
 
-## Deploy on Vercel
+7. <b>next-themes</b>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   - library to easily allow us to switch between light and dark theme
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+8. <b>react-dropzone</b>
+
+   - used to upload files
+
+9. <b>web3modal</b>
+   - library to interact with smart contracts on client side
+
+## DevDependencies
+
+> Belo three are used for styling purposes. Tailwind is a classic CSS utility library that allow us to create styles more easily.
+
+1. <b>autoprefixer</b>
+2. <b>postcss</b>
+3. <b>tailwindcss</b>
+   - `npx tailwindcss init -p`
+   - [Tailwind Guide for NextJS](-https://tailwindcss.com/docs/guides/nextjs)
+4. <b>eslint</b>
+   - linting library to make sure we write clean and scalable code
+   - helps to find and fix problems in your Javascript code
+   - `npx eslint --init`
+   - <b>Steps</b>
+     1. To check syntax, find problems and enforce code style
+     2. Javascript modules (import/export)
+     3. React
+     4. Does your project use typescript? `No`
+     5. Browser
+     6. Use a popular style guide
+     7. Airbnb
+     8. Format - javascript
+     9. Install - `Yes`
+
+## Files and Folder structures
+
+1. <b>node_modules</b>
+
+   - contains code for all the pakcages
+
+2. <b>pages</b>
+
+   - contains all our different routes
+   - file based routing
+
+3. <b>public</b>
+
+   - assets
+
+4. <b>styles</b>
+
+   - `globals.css`
+     - contains basic and global styling
+
+5. <b>tailwind.config.js</b>
+6. <b>postcss.config.js</b>
+
+7. <b>.eslintrc.json</b>
