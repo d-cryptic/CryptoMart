@@ -5,9 +5,15 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 
 import images from "../assets";
+import { Button, Input } from "../components";
 
 const CreateNft = () => {
   const [fileUrl, setFileUrl] = useState(null);
+  const [formInput, setFormInput] = useState({
+    price: "",
+    name: "",
+    description: "",
+  });
   const { theme } = useTheme();
 
   const onDrop = useCallback(() => {
@@ -37,6 +43,8 @@ const CreateNft = () => {
     [isDragActive, isDragAccept, isDragReject]
   );
 
+  console.log(formInput);
+
   return (
     <div className="flex justify-center sm:px-4 p-12">
       <div className="w-3/5 md:w-full">
@@ -49,43 +57,73 @@ const CreateNft = () => {
           </p>
 
           <div className="mt-4">
-            <div>
-              <div {...getRootProps()} className={fileStyle}>
-                <input {...getInputProps()} />
-                <div className="flexCenter flex-col text-center">
-                  <p className="font-poppins dark:text-white text-nft-black-1 font-semibold text-xl">
-                    JPG, PNG, GIF, SVG Max 100mb
-                  </p>
+            <div {...getRootProps()} className={fileStyle}>
+              <input {...getInputProps()} />
+              <div className="flexCenter flex-col text-center">
+                <p className="font-poppins dark:text-white text-nft-black-1 font-semibold text-xl">
+                  JPG, PNG, GIF, SVG Max 100mb
+                </p>
 
-                  <div className="my-12 w-full flex justify-center">
-                    <Image
-                      src={images.upload}
-                      width={100}
-                      height={100}
-                      objectFit="contain"
-                      alt="File Upload"
-                      className={theme === "light" && "filter invert"}
-                    />
-                  </div>
-
-                  <p className="font-poppins dark:text-white text-nft-black-1 font-semibold text-xl">
-                    Drag and Drop File
-                  </p>
-                  <p className="font-poppins dark:text-white text-nft-black-1 font-semibold text-xl mt-2">
-                    or Browse media on your device
-                  </p>
+                <div className="my-12 w-full flex justify-center">
+                  <Image
+                    src={images.upload}
+                    width={100}
+                    height={100}
+                    objectFit="contain"
+                    alt="File Upload"
+                    className={theme === "light" && "filter invert"}
+                  />
                 </div>
-              </div>
 
-              {fileUrl && (
-                <aside>
-                  <div>
-                    <img src={fileUrl} alt="asset_file" />
-                  </div>
-                </aside>
-              )}
+                <p className="font-poppins dark:text-white text-nft-black-1 font-semibold text-xl">
+                  Drag and Drop File
+                </p>
+                <p className="font-poppins dark:text-white text-nft-black-1 font-semibold text-xl mt-2">
+                  or Browse media on your device
+                </p>
+              </div>
             </div>
+
+            {fileUrl && (
+              <aside>
+                <div>
+                  <img src={fileUrl} alt="asset_file" />
+                </div>
+              </aside>
+            )}
           </div>
+        </div>
+
+        <Input
+          inputType="input"
+          title="Name"
+          placeholder="NFT Name"
+          handleClick={() => {}}
+        />
+        <Input
+          inputType="textarea"
+          title="Description"
+          placeholder="NFT Description"
+          handleClick={(e) => {
+            setFormInput({ ...formInput, name: e.target.value });
+          }}
+        />
+        <Input
+          inputType="number"
+          title="Price"
+          placeholder="NFT Price"
+          handleClick={(e) => {
+            setFormInput({ ...formInput, name: e.target.value });
+          }}
+        />
+        <div className="mt-7 w-full flex justify-end">
+          <Button
+            btnName="Create NFT"
+            className="rounded-xl"
+            handleClick={(e) => {
+              setFormInput({ ...formInput, name: e.target.value });
+            }}
+          />
         </div>
       </div>
     </div>
