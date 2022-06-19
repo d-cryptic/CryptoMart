@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-import "hardhard/console.sol";
+import "hardhat/console.sol";
 
 contract NFTMarketplace is ERC721URIStorage {
 	using Counters for Counters.Counter;
@@ -20,7 +20,7 @@ contract NFTMarketplace is ERC721URIStorage {
 	address payable owner;
 
 // mapping id to the item so that we can fetch it later
-	mapping(uint256 => marketItem) private idToMarketItem;
+	mapping(uint256 => MarketItem) private idToMarketItem;
 
 	struct MarketItem{
 		uint256 tokenId;
@@ -31,22 +31,22 @@ contract NFTMarketplace is ERC721URIStorage {
 	}
 
 // event triggered upon action
-	event MarketItemCreated{
+	event MarketItemCreated (
 		uint256 indexed tokenId,
 		address  seller,
 		address  owner,
 		uint256 price,
-		bool sold,
-	}
+		bool sold
+	);
 
 	constructor(){
 
 	// one who is deploying the contract is the owner
-	owner = payable(msg.sender)
+	owner = payable(msg.sender);
 	}
 
 	function updateListingPrice(uint _listingPrice) public payable{
-		require=(owner == msg.sender, "Only marketplace owner can update the listing price");
+		require(owner == msg.sender, "Only marketplace owner can update the listing price");
 		listingPrice = _listingPrice;
 	}
 
@@ -69,6 +69,41 @@ contract NFTMarketplace is ERC721URIStorage {
 		// create/list it to our marketplace
 		createMarketItem(newTokenId, price);
 		return newTokenId;
+	}
+
+	// create market item
+	function createMarketItem(uint256 tokenId, uint256 price) private{
+		require(price>0, "Price must be at least 1");
+		require(msg.value == listingPrice, "Price must be equal to listing price");
+
+		idToMarketItem[tokenId] = MarketItem(
+			tokenId,
+			payable(msg.sender),
+			payable(address(this)),
+			price,
+			false
+		);
+
+// transfer the ownership
+		_transfer(msg.sender, address(this), tokenId);
+		
+		// emitting the event
+		emit MarketItemCreated(tokenId, msg.sender, address(this), price, false);
+	}
+
+	// Resell Token function
+	function resellToken(uint256 tokenId, uint256 price) public payable {
+		require(idToMarketItem[tokenId].owner == msg.sender, "Only item owner can perform this operation");
+		require(msg.value == listingPrice, "Price must be equal to listing price");
+
+		idToMarketItem[tokenId].sold = false;
+		idToMarketItem[tokenId].price = price;
+		idToMarketItem[tokenId].seller = payable(msg.sender);
+		idToMarketItem[tokenId].owner = payable(address(this));
+
+		_itemsSold.decrement();
+
+		_transfer(msg.sender, address(this), tokenId);
 	}
 
 }
