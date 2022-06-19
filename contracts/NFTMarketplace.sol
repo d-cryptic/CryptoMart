@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: UNDEFINED
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import "hardhat/console.sol";
 
-contract NFTMarketplace is ERC721URIStorage {
+abstract contract NFTMarketplace is ERC721URIStorage {
 	using Counters for Counters.Counter;
 
 	Counters.Counter private _tokenIds;	
@@ -105,6 +105,27 @@ contract NFTMarketplace is ERC721URIStorage {
 		_itemsSold.decrement();
 
 		_transfer(msg.sender, address(this), tokenId);
+	}
+
+	// create market sell
+	function createMarketSell(uint256 tokenId) public payable{
+		uint price = idToMarketItem[tokenId].price;
+
+		require(msg.value == price, "Please submit the asking price in order to complete the purchase"); 
+
+		// the one who is buying the token becomes the owner
+		idToMarketItem[tokenId].owner = payable(msg.sender);
+		idToMarketItem[tokenId].sold = true;
+		idToMarketItem[tokenId].seller = payable(address(0));
+
+		_itemsSold.increment();
+		_transfer(address(this), msg.sender, tokenId);
+
+		// listing price from owner to nft marketplace 
+		payable(owner).transfer(listingPrice);
+		// price from buyer to seller 
+		payable(idToMarketItem[tokenId].seller).transfer(msg.value);
+
 	}
 
 }
