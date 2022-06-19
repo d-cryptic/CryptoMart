@@ -7,7 +7,7 @@ import Link from "next/link";
 import images from "../assets";
 import { Button } from ".";
 
-const MenuItems = ({ isMobile, active, setActive }) => {
+const MenuItems = ({ isMobile, active, setActive, setIsOpen }) => {
   const generateLink = (i) => {
     switch (i) {
       case 0:
@@ -31,6 +31,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
           key={i}
           onClick={() => {
             setActive(item);
+            if (isMobile) setIsOpen(false);
           }}
           className={`flex flex-row items-center font-poppins font-semibold text-base dark:hover:text-white hover:text-nft-dark mx-3  ${
             active === item
@@ -44,7 +45,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
   );
 };
 
-const ButtonGroup = ({ setActive, router }) => {
+const ButtonGroup = ({ setActive, router, isMobile, setIsOpen }) => {
   const hasConnected = true;
   return hasConnected ? (
     <Button
@@ -53,6 +54,7 @@ const ButtonGroup = ({ setActive, router }) => {
       handleClick={() => {
         setActive("");
         router.push("/create-nft");
+        if (isMobile) setIsOpen(false);
       }}
     />
   ) : (
@@ -90,7 +92,7 @@ const Navbar = () => {
           </div>
         </Link>
         <Link href="/">
-          <div className="hidden md:flex" onClick={() => {}}>
+          <div className="hidden md:flex cursor-pointer" onClick={() => {}}>
             <Image
               src={images.logo02}
               objectFit="contain"
@@ -152,10 +154,20 @@ const Navbar = () => {
         {isOpen && (
           <div className="fixed inset-9 top-65 dark:bg-nft-dark bg-white z-30 nav-h flex justify-between flex-col">
             <div className="flex-1 p-4">
-              <MenuItems active={active} setActive={setActive} isMobile />
+              <MenuItems
+                active={active}
+                setActive={setActive}
+                isMobile
+                setIsOpen={setIsOpen}
+              />
             </div>
             <div className="p-4 border-t dark:border-nft black-1 border-nft-gray-1">
-              <ButtonGroup setActive={setActive} router={router} />
+              <ButtonGroup
+                setActive={setActive}
+                router={router}
+                isMobile
+                setIsOpen={setIsOpen}
+              />
             </div>
           </div>
         )}
